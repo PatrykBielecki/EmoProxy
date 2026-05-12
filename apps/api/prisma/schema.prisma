@@ -1,0 +1,153 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StorageMode {
+  internal_postgres
+  external_postgres
+  google_sheets
+}
+
+enum AdditionalFieldType {
+  text
+  number
+  boolean
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model SurveyConfig {
+  id               String   @id @default("default")
+  introTitle       String
+  introDescription String
+  emotionCount     Int
+  minSizeScale     Float    @default(1)
+  maxSizeScale     Float    @default(10)
+  minSpeedScale    Float    @default(1)
+  maxSpeedScale    Float    @default(10)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Emotion {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  label     String
+  order     Int
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AnimationPreset {
+  id        String   @id @default(cuid())
+  name      String
+  type      String   @unique
+  keyframesJson String?
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ShapePreset {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  name      String
+  svg       String?
+  enabled   Boolean  @default(true)
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdditionalField {
+  id        String              @id @default(cuid())
+  key       String              @unique
+  label     String
+  type      AdditionalFieldType
+  required  Boolean             @default(false)
+  enabled   Boolean             @default(true)
+  order     Int
+  createdAt DateTime            @default(now())
+  updatedAt DateTime            @updatedAt
+}
+
+model AnalyticsSetting {
+  id                    String   @id @default("default")
+  outlierFilteringEnabled Boolean @default(true)
+  zScoreThreshold       Float    @default(2)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model StorageConfig {
+  id                       String      @id @default("default")
+  mode                     StorageMode @default(internal_postgres)
+  externalDatabaseUrl      String?
+  googleSheetId            String?
+  googleServiceAccountJson String?
+  createdAt                DateTime    @default(now())
+  updatedAt                DateTime    @updatedAt
+}
+
+model SurveySession {
+  id              String                    @id @default(cuid())
+  createdAt       DateTime                  @default(now())
+  storageMode     StorageMode               @default(internal_postgres)
+  age             Int?
+  country         String?
+  gender          String?
+  accepted        Boolean                   @default(true)
+  rejectionReason String?
+  metadata        Json?
+  emotionResponses EmotionResponse[]
+  additionalResponses SurveyAdditionalResponse[]
+}
+
+model SurveyAdditionalResponse {
+  id        String        @id @default(cuid())
+  sessionId String
+  fieldKey  String
+  value     String
+  session   SurveySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  createdAt DateTime      @default(now())
+}
+
+model EmotionResponse {
+  id              String        @id @default(cuid())
+  sessionId       String
+  emotionKey      String
+  shape           String
+  animationType   String
+  color           String        @default("#b17457")
+  colorHue        Float?
+  colorSaturation Float?
+  colorValue      Float?
+  size            Float
+  speed           Float
+  valence         Float
+  arousal         Float
+  dominance       Float
+  createdAt       DateTime      @default(now())
+  session         SurveySession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([emotionKey])
+  @@index([sessionId])
+}
+
+model AnalyticsRun {
+  id        String   @id @default(cuid())
+  result    Json
+  createdAt DateTime @default(now())
+}

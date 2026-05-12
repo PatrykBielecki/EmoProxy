@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background-color: #dddddd;
+  color: #4a4947;
+}
+
+.animation-bounce {
+  animation: bounce 1s infinite;
+}
+
+.animation-rotate {
+  animation: rotate 2s linear infinite;
+}
+
+.animation-fade {
+  animation: fade 1.5s ease-in-out infinite;
+}
+
+.animation-shake {
+  animation: shake 0.6s infinite;
+}
+
+.animation-scale {
+  animation: scale 1s ease-in-out infinite;
+}
+
+.animation-flip {
+  animation: flip 1.2s linear infinite;
+}
+
+.animation-stretch {
+  animation: stretch 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fade {
+  0%,
+  100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes shake {
+  0%,
+  100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+@keyframes scale {
+  0%,
+  100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+@keyframes flip {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+@keyframes stretch {
+  0%,
+  100% { transform: scaleX(1); }
+  50% { transform: scaleX(1.3); }
+}

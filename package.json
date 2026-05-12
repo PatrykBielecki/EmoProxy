@@ -1,0 +1,23 @@
+{
+  "name": "emotions-survey",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces",
+    "typecheck": "npm run typecheck --workspaces",
+    "dev:db": "docker compose up -d db",
+    "dev:down": "docker compose down",
+    "dev:apps": "concurrently -k -n api,web -c blue,magenta \"npm run dev:api\" \"npm run dev:web\"",
+    "dev:local": "npm run dev:db && npm run db:generate --workspace @repo/api && npm run db:migrate --workspace @repo/api && npm run db:seed --workspace @repo/api && npm run dev:apps",
+    "dev:web": "npm run dev --workspace @repo/web",
+    "dev:api": "npm run dev --workspace @repo/api"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
