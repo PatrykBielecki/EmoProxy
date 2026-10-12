@@ -1,6 +1,6 @@
-# Emotions Visualization Research Platform
+# EmoProxy
 
-A full-stack monorepo for emotion visualization research. Participants complete a browser-based survey in which they configure animated shapes to express named emotions. The resulting data is stored in PostgreSQL and analyzed through a password-protected admin panel.
+EmoProxy is a full-stack monorepo for emotion visualization research. Participants complete a browser-based survey in which they configure animated shapes to express named emotions. The resulting data is stored in PostgreSQL and analyzed through a password-protected admin panel.
 
 ## Table of Contents
 
@@ -211,8 +211,8 @@ The survey and admin interface support English and Polish. The language switcher
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/PatrykBielecki/emotions-survey.git
-   cd emotions-survey
+   git clone https://github.com/PatrykBielecki/EmoProxy.git
+   cd EmoProxy
    ```
 
 2. Copy the example environment file:

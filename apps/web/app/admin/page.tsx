@@ -509,6 +509,7 @@ export default function AdminPage() {
       const html2canvas = (await import('html2canvas')).default;
 
       const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      doc.setProperties({ title: 'EmoProxy – Statistics Report', creator: 'EmoProxy' });
       const pageWidth = doc.internal.pageSize.getWidth();
 
       type DocWithAutoTable = typeof doc & { lastAutoTable?: { finalY?: number } };
@@ -529,7 +530,7 @@ export default function AdminPage() {
       // Title page header
       doc.setFontSize(18);
       doc.setFont('helvetica', 'bold');
-      doc.text('Emotions Visualization – Statistics Report', pageWidth / 2, 15, { align: 'center' });
+      doc.text('EmoProxy – Statistics Report', pageWidth / 2, 15, { align: 'center' });
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
       doc.text(`Generated: ${new Date().toLocaleString()}`, pageWidth / 2, 22, { align: 'center' });
@@ -703,7 +704,17 @@ export default function AdminPage() {
         }
       }
 
-      doc.save('emotions-statistics-report.pdf');
+      const pageCount = doc.getNumberOfPages();
+      for (let page = 2; page <= pageCount; page += 1) {
+        doc.setPage(page);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(90);
+        doc.text('EmoProxy', pageWidth / 2, 8, { align: 'center' });
+        doc.setTextColor(0);
+      }
+
+      doc.save('emoproxy-statistics-report.pdf');
       setExportStatus('PDF report downloaded.');
       notify('success', 'PDF report downloaded.');
     } catch (error) {
